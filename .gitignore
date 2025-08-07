@@ -32,3 +32,6 @@
 /config/master.key
 
 /config/credentials/production.key
+
+# Ignore coverage reports
+/coverage/
