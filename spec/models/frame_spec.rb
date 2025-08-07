@@ -3,6 +3,10 @@ require 'rails_helper'
 RSpec.describe Frame, type: :model do
   subject { build(:frame) }
 
+  describe 'circles' do
+    it { should have_many(:circles).dependent(:destroy) }
+  end
+
   describe 'x' do
     it { should validate_presence_of(:x) }
     it { should validate_numericality_of(:x) }

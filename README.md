@@ -13,13 +13,13 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing f
 
 ## Business rules
 
-- [] Central position of frames and circles (X and Y axes) in centimeters, supporting decimal values;
-- [] Frame dimensions (width and height) in centimeters, supporting decimal values;
-- [] Circle diameter in centimeters, supporting decimal values;
-- [] A frame can contain N circles;
-- [] A circle can never touch another circle within the same frame;
-- [] A circle must fit completely inside the frame: every point of the circle must stay within the frame's borders (can touch, but not exceed);
-- [] A circle must always belong to an existing frame;
+- [X] Central position of frames and circles (X and Y axes) in centimeters, supporting decimal values;
+- [X] Frame dimensions (width and height) in centimeters, supporting decimal values;
+- [X] Circle diameter in centimeters, supporting decimal values;
+- [X] A frame can contain N circles;
+- [X] A circle can never touch another circle within the same frame;
+- [X] A circle must fit completely inside the frame: every point of the circle must stay within the frame's borders (can touch, but not exceed);
+- [X] A circle must always belong to an existing frame;
 - [X] A frame cannot touch another frame: the borders of frames cannot intersect or touch;
 
 ## Endpoints
@@ -89,6 +89,9 @@ $ bin/setup
 ```bash
 # run the project in development mode
 $ bin/dev
+
+# run all tests
+$ bin/rspec
 
 # run linter (backend)
 $ bin/rubocop
