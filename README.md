@@ -20,7 +20,7 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing f
 - [] A circle can never touch another circle within the same frame;
 - [] A circle must fit completely inside the frame: every point of the circle must stay within the frame's borders (can touch, but not exceed);
 - [] A circle must always belong to an existing frame;
-- [] A frame cannot touch another frame: the borders of frames cannot intersect or touch;
+- [X] A frame cannot touch another frame: the borders of frames cannot intersect or touch;
 
 ## Endpoints
 
