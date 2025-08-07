@@ -1,6 +1,6 @@
 # Coding Challenge
 
-Develop a RESTful API in Ruby on Rails (API-only) for registering and managing squares and circles, following geometric positioning and spatial limitation rules. All distances and dimensions must be expressed in centimeters, allowing decimal values.
+Develop a RESTful API in Ruby on Rails (API-only) for registering and managing frames and circles, following geometric positioning and spatial limitation rules. All distances and dimensions must be expressed in centimeters, allowing decimal values.
 
 ## Requirements
 
@@ -13,23 +13,23 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing s
 
 ## Business rules
 
-- [] Central position of squares and circles (X and Y axes) in centimeters, supporting decimal values;
-- [] Square dimensions (width and height) in centimeters, supporting decimal values;
+- [] Central position of frames and circles (X and Y axes) in centimeters, supporting decimal values;
+- [] Frame dimensions (width and height) in centimeters, supporting decimal values;
 - [] Circle diameter in centimeters, supporting decimal values;
-- [] A square can contain N circles;
-- [] A circle can never touch another circle within the same square;
-- [] A circle must fit completely inside the square: every point of the circle must stay within the square's borders (can touch, but not exceed);
-- [] A circle must always belong to an existing square;
-- [] A square cannot touch another square: the borders of squares cannot intersect or touch;
+- [] A frame can contain N circles;
+- [] A circle can never touch another circle within the same frame;
+- [] A circle must fit completely inside the frame: every point of the circle must stay within the frame's borders (can touch, but not exceed);
+- [] A circle must always belong to an existing frame;
+- [] A frame cannot touch another frame: the borders of frames cannot intersect or touch;
 
 ## Endpoints
 
 POST /frames
-- [] Creates a new square, receiving the position, height and width. Can also receive circles to be created together;
+- [] Creates a new frame, receiving the position, height and width. Can also receive circles to be created together;
 - [] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 POST /frames/:frame/:id/circles
-- [] Adds a circle to the specified square;
+- [] Adds a circle to the specified frame;
 - [] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 PUT /circles/:id
@@ -37,11 +37,11 @@ PUT /circles/:id
 - [] Returns 200 OK on success or 422 Unprocessable Entity on validation errors;
 
 GET /circles?center_x=X&center_y=Y&radius=R&frame_id=ID
-- [] Lists all circles completely within the specified radius (in centimeters) from a central point, optionally filtered by square;
+- [] Lists all circles completely within the specified radius (in centimeters) from a central point, optionally filtered by frame;
 - [] Returns 200 OK with the list of circles;
 
 GET /fames/:id
-- [] Returns details of a square, including:
+- [] Returns details of a frame, including:
   - [] x position
   - [] y position
   - [] total number of circles
@@ -49,14 +49,14 @@ GET /fames/:id
   - [] position of the circle that is in the lowest position
   - [] position of the circle that is in the leftmost position
   - [] position of the circle that is in the rightmost position
-- [] Returns 200 OK with the square data and circle metrics;
+- [] Returns 200 OK with the frame data and circle metrics;
 
 DELETE /circles/:id
 - [] Removes a circle;
 - [] Returns 204 No Content on success or 404 Not Found on error;
 
 DELETE /frames/:id
-- [] Removes a square only if there are no associated circles;
+- [] Removes a frame only if there are no associated circles;
 - [] Returns 204 No Content on success or 422 Unprocessable Entity on error;
 
 ## Setup Ruby (only if you have not installed)
