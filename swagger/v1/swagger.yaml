@@ -207,6 +207,103 @@ paths:
                   error:
                     type: string
                     example: Frame not found
+  "/frames/{frame_id}/circles":
+    parameters:
+    - name: frame_id
+      in: path
+      description: Frame ID
+      required: true
+      schema:
+        type: integer
+    post:
+      summary: Add a circle to frame
+      tags:
+      - Circles
+      description: Adds a new circle to the specified frame
+      parameters: []
+      responses:
+        '201':
+          description: Circle created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  x:
+                    type: string
+                    example: '10.0'
+                  "y":
+                    type: string
+                    example: '10.0'
+                  diameter:
+                    type: string
+                    example: '2.0'
+                  radius:
+                    type: string
+                    example: '1.0'
+                  frame_id:
+                    type: integer
+                    example: 1
+                required:
+                - id
+                - x
+                - "y"
+                - diameter
+                - radius
+                - frame_id
+        '422':
+          description: Invalid circle parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - X can't be blank
+        '404':
+          description: Frame not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Frame not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                circle:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      description: X coordinate of circle center in centimeters
+                      example: 10.0
+                    "y":
+                      type: number
+                      description: Y coordinate of circle center in centimeters
+                      example: 10.0
+                    diameter:
+                      type: number
+                      description: Diameter of circle in centimeters
+                      example: 2.0
+                  required:
+                  - x
+                  - "y"
+                  - diameter
+              required:
+              - circle
 servers:
 - url: http://localhost:3000
   description: Development server

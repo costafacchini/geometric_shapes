@@ -233,4 +233,113 @@ RSpec.describe 'Frames API', type: :request do
       end
     end
   end
+
+  path '/frames/{frame_id}/circles' do
+    parameter name: 'frame_id', in: :path, type: :integer, description: 'Frame ID'
+
+    post('Add a circle to frame') do
+      tags 'Circles'
+      description 'Adds a new circle to the specified frame'
+      consumes 'application/json'
+      produces 'application/json'
+
+      parameter name: :circle_params, in: :body, schema: {
+        type: :object,
+        properties: {
+          circle: {
+            type: :object,
+            properties: {
+              x: {
+                type: :number,
+                description: 'X coordinate of circle center in centimeters',
+                example: 10.0
+              },
+              y: {
+                type: :number,
+                description: 'Y coordinate of circle center in centimeters',
+                example: 10.0
+              },
+              diameter: {
+                type: :number,
+                description: 'Diameter of circle in centimeters',
+                example: 2.0
+              }
+            },
+            required: [ 'x', 'y', 'diameter' ]
+          }
+        },
+        required: [ 'circle' ]
+      }
+
+      response(201, 'Circle created successfully') do
+        schema type: :object,
+               properties: {
+                 id: { type: :integer, example: 1 },
+                 x: { type: :string, example: '10.0' },
+                 y: { type: :string, example: '10.0' },
+                 diameter: { type: :string, example: '2.0' },
+                 radius: { type: :string, example: '1.0' },
+                 frame_id: { type: :integer, example: 1 }
+               },
+               required: [ 'id', 'x', 'y', 'diameter', 'radius', 'frame_id' ]
+
+        let(:frame) { create(:frame, x: 10, y: 10, width: 5, height: 5) }
+        let(:frame_id) { frame.id }
+        let(:circle_params) { { circle: { x: 10.0, y: 10.0, diameter: 2.0 } } }
+
+        run_test! do |response|
+          data = JSON.parse(response.body)
+          expect(data).to include('id', 'x', 'y', 'diameter', 'radius', 'frame_id')
+        end
+      end
+
+      response(422, 'Invalid circle parameters') do
+        schema type: :object,
+               properties: {
+                 errors: {
+                   type: :array,
+                   items: { type: :string },
+                   example: [ "X can't be blank" ]
+                 }
+               }
+
+        context 'missing required parameter' do
+          let(:frame) { create(:frame, x: 10, y: 10, width: 5, height: 5) }
+          let(:frame_id) { frame.id }
+          let(:circle_params) { { circle: { x: nil, y: 10.0, diameter: 2.0 } } }
+          run_test!
+        end
+
+        context 'circle outside frame boundaries' do
+          let(:frame) { create(:frame, x: 10, y: 10, width: 5, height: 5) }
+          let(:frame_id) { frame.id }
+          let(:circle_params) { { circle: { x: 15.0, y: 15.0, diameter: 2.0 } } }
+          run_test!
+        end
+
+        context 'circle colliding with existing circle' do
+          let(:frame) { create(:frame, x: 10, y: 10, width: 5, height: 5) }
+          let(:frame_id) { frame.id }
+          let(:circle_params) { { circle: { x: 10.0, y: 10.0, diameter: 2.0 } } }
+
+          before do
+            create(:circle, frame: frame, x: 10, y: 10, diameter: 2)
+          end
+
+          run_test!
+        end
+      end
+
+      response(404, 'Frame not found') do
+        schema type: :object,
+               properties: {
+                 error: { type: :string, example: 'Frame not found' }
+               }
+
+        let(:frame_id) { 999 }
+        let(:circle_params) { { circle: { x: 10.0, y: 10.0, diameter: 2.0 } } }
+        run_test!
+      end
+    end
+  end
 end

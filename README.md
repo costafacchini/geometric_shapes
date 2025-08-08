@@ -30,8 +30,8 @@ POST /frames
 - [X] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 POST /frames/:frame/:id/circles
-- [] Adds a circle to the specified frame;
-- [] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
+- [X] Adds a circle to the specified frame;
+- [X] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 PUT /circles/:id
 - [] Updates the position of an existing circle;
