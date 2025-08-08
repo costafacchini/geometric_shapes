@@ -38,6 +38,28 @@ paths:
                   circles_count:
                     type: integer
                     example: 0
+                  circle:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1
+                      x:
+                        type: string
+                        example: '10.0'
+                      "y":
+                        type: string
+                        example: '10.0'
+                      diameter:
+                        type: string
+                        example: '2.0'
+                      radius:
+                        type: string
+                        example: '1.0'
+                      frame_id:
+                        type: integer
+                        example: 1
+                    nullable: true
                 required:
                 - id
                 - x
@@ -83,6 +105,26 @@ paths:
                       type: number
                       description: Height of frame in centimeters
                       example: 5.0
+                    circle:
+                      type: object
+                      description: Optional circle to create with the frame
+                      properties:
+                        x:
+                          type: number
+                          description: X coordinate of circle center in centimeters
+                          example: 10.0
+                        "y":
+                          type: number
+                          description: Y coordinate of circle center in centimeters
+                          example: 10.0
+                        diameter:
+                          type: number
+                          description: Diameter of circle in centimeters
+                          example: 2.0
+                      required:
+                      - x
+                      - "y"
+                      - diameter
                   required:
                   - x
                   - "y"

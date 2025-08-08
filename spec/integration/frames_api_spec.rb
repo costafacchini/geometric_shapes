@@ -33,6 +33,28 @@ RSpec.describe 'Frames API', type: :request do
                 type: :number,
                 description: 'Height of frame in centimeters',
                 example: 5.0
+              },
+              circle: {
+                type: :object,
+                description: 'Optional circle to create with the frame',
+                properties: {
+                  x: {
+                    type: :number,
+                    description: 'X coordinate of circle center in centimeters',
+                    example: 10.0
+                  },
+                  y: {
+                    type: :number,
+                    description: 'Y coordinate of circle center in centimeters',
+                    example: 10.0
+                  },
+                  diameter: {
+                    type: :number,
+                    description: 'Diameter of circle in centimeters',
+                    example: 2.0
+                  }
+                },
+                required: [ 'x', 'y', 'diameter' ]
               }
             },
             required: [ 'x', 'y', 'width', 'height' ]
@@ -49,15 +71,43 @@ RSpec.describe 'Frames API', type: :request do
                  y: { type: :string, example: '10.0' },
                  width: { type: :string, example: '5.0' },
                  height: { type: :string, example: '5.0' },
-                 circles_count: { type: :integer, example: 0 }
+                 circles_count: { type: :integer, example: 0 },
+                 circle: {
+                   type: :object,
+                   properties: {
+                     id: { type: :integer, example: 1 },
+                     x: { type: :string, example: '10.0' },
+                     y: { type: :string, example: '10.0' },
+                     diameter: { type: :string, example: '2.0' },
+                     radius: { type: :string, example: '1.0' },
+                     frame_id: { type: :integer, example: 1 }
+                   },
+                   nullable: true
+                 }
                },
                required: [ 'id', 'x', 'y', 'width', 'height', 'circles_count' ]
 
-        let(:frame_params) { { frame: { x: 10.0, y: 10.0, width: 5.0, height: 5.0 } } }
+        context 'frame without circle' do
+          let(:frame_params) { { frame: { x: 10.0, y: 10.0, width: 5.0, height: 5.0 } } }
 
-        run_test! do |response|
-          data = JSON.parse(response.body)
-          expect(data).to include('id', 'x', 'y', 'width', 'height', 'circles_count')
+          run_test! do |response|
+            data = JSON.parse(response.body)
+            expect(data).to include('id', 'x', 'y', 'width', 'height', 'circles_count')
+            expect(data['circles_count']).to eq(0)
+            expect(data).not_to have_key('circle')
+          end
+        end
+
+        context 'frame with circle' do
+          let(:frame_params) { { frame: { x: 10.0, y: 10.0, width: 5.0, height: 5.0, circle: { x: 10.0, y: 10.0, diameter: 2.0 } } } }
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+            expect(data).to include('id', 'x', 'y', 'width', 'height', 'circles_count')
+            expect(data['circles_count']).to eq(1)
+            expect(data).to have_key('circle')
+            expect(data['circle']).to include('id', 'x', 'y', 'diameter', 'radius', 'frame_id')
+          end
         end
       end
 
@@ -93,6 +143,11 @@ RSpec.describe 'Frames API', type: :request do
             create(:frame, x: 10, y: 10, width: 5, height: 5) # Frame que vai causar overlap
           end
 
+          run_test!
+        end
+
+        context 'frame with invalid circle' do
+          let(:frame_params) { { frame: { x: 10.0, y: 10.0, width: 5.0, height: 5.0, circle: { x: 15.0, y: 15.0, diameter: 2.0 } } } }
           run_test!
         end
       end

@@ -26,7 +26,7 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing f
 
 POST /frames
 - [X] Creates a new frame, receiving the position, height and width;
-- [] Can also receive circles to be created together;
+- [X] Can also receive circles to be created together;
 - [X] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 POST /frames/:frame/:id/circles
@@ -117,65 +117,3 @@ docker compose up
 ## API Documentation
 
 The API documentation is available at `/api-docs` when the server is running.
-
-### Frames API
-
-The following endpoints are available for managing frames:
-
-#### POST /frames
-Creates a new frame.
-
-**Request Body:**
-```json
-{
-  "frame": {
-    "x": 10.0,
-    "y": 10.0,
-    "width": 5.0,
-    "height": 5.0
-  }
-}
-```
-
-**Response (201 Created):**
-```json
-{
-  "id": 1,
-  "x": "10.0",
-  "y": "10.0",
-  "width": "5.0",
-  "height": "5.0",
-  "circles_count": 0
-}
-```
-
-#### GET /frames/:id
-Retrieves frame details including circle position metrics.
-
-**Response (200 OK):**
-```json
-{
-  "id": 1,
-  "x": "10.0",
-  "y": "10.0",
-  "width": "5.0",
-  "height": "5.0",
-  "circles_count": 2,
-  "highest_circle": {"x": "11.5", "y": "11.5"},
-  "lowest_circle": {"x": "10.0", "y": "10.0"},
-  "leftmost_circle": {"x": "10.0", "y": "10.0"},
-  "rightmost_circle": {"x": "11.5", "y": "11.5"}
-}
-```
-
-#### DELETE /frames/:id
-Deletes a frame. Only works if the frame has no associated circles.
-
-**Response (204 No Content):** Frame deleted successfully
-
-**Response (422 Unprocessable Entity):**
-```json
-{
-  "error": "Cannot delete frame with associated circles"
-}
-```
