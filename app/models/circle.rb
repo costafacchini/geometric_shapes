@@ -1,5 +1,5 @@
 class Circle < ApplicationRecord
-  belongs_to :frame
+  belongs_to :frame, counter_cache: true
 
   validates :x, :y, :diameter, presence: true, numericality: true
   validate :must_be_within_frame
