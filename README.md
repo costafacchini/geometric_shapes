@@ -43,8 +43,8 @@ PUT /circles/:id
 - [X] Returns 200 OK on success or 422 Unprocessable Entity on validation errors;
 
 GET /circles?center_x=X&center_y=Y&radius=R&frame_id=ID
-- [] Lists all circles completely within the specified radius (in centimeters) from a central point, optionally filtered by frame;
-- [] Returns 200 OK with the list of circles;
+- [X] Lists all circles completely within the specified radius (in centimeters) from a central point, optionally filtered by frame;
+- [X] Returns 200 OK with the list of circles;
 
 GET /fames/:id
 - [X] Returns details of a frame, including:

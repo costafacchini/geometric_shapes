@@ -1,6 +1,26 @@
 class CirclesController < ApplicationController
   before_action :set_circle, only: [ :update ]
 
+  # GET /circles
+  def index
+    @circles = Circle.all
+
+    @circles = @circles.where(frame_id: params[:frame_id]) if params[:frame_id].present?
+
+    if params[:center_x].present? && params[:center_y].present? && params[:radius].present?
+      center_x = params[:center_x].to_f
+      center_y = params[:center_y].to_f
+      search_radius = params[:radius].to_f
+
+      @circles = @circles.select do |circle|
+        distance_from_center = Math.sqrt((circle.x - center_x)**2 + (circle.y - center_y)**2)
+        distance_from_center + circle.radius <= search_radius
+      end
+    end
+
+    render :index
+  end
+
   # PUT /circles/:id
   def update
     if @circle.update(circle_params)

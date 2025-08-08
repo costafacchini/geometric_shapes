@@ -5,6 +5,76 @@ info:
   version: v1
   description: API for managing geometric frames and circles with validation rules
 paths:
+  "/circles":
+    get:
+      summary: List circles with optional filters
+      tags:
+      - Circles
+      description: Lists all circles, optionally filtered by frame and/or within a
+        radius from a center point
+      parameters:
+      - name: frame_id
+        in: query
+        required: false
+        description: Filter circles by frame ID
+        schema:
+          type: integer
+      - name: center_x
+        in: query
+        required: false
+        description: X coordinate of center point for radius search
+        schema:
+          type: number
+      - name: center_y
+        in: query
+        required: false
+        description: Y coordinate of center point for radius search
+        schema:
+          type: number
+      - name: radius
+        in: query
+        required: false
+        description: Search radius in centimeters (returns circles completely within
+          this radius)
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Circles retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  circles:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        x:
+                          type: string
+                          example: '10.0'
+                        "y":
+                          type: string
+                          example: '10.0'
+                        diameter:
+                          type: string
+                          example: '2.0'
+                        radius:
+                          type: string
+                          example: '1.0'
+                        frame_id:
+                          type: integer
+                          example: 1
+                  total_count:
+                    type: integer
+                    example: 3
+                required:
+                - circles
+                - total_count
   "/circles/{id}":
     parameters:
     - name: id

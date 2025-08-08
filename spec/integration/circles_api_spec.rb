@@ -1,6 +1,102 @@
 require 'swagger_helper'
 
 RSpec.describe 'Circles API', type: :request do
+  path '/circles' do
+    get('List circles with optional filters') do
+      tags 'Circles'
+      description 'Lists all circles, optionally filtered by frame and/or within a radius from a center point'
+      produces 'application/json'
+
+      parameter name: :frame_id, in: :query, type: :integer, required: false,
+                description: 'Filter circles by frame ID'
+      parameter name: :center_x, in: :query, type: :number, required: false,
+                description: 'X coordinate of center point for radius search'
+      parameter name: :center_y, in: :query, type: :number, required: false,
+                description: 'Y coordinate of center point for radius search'
+      parameter name: :radius, in: :query, type: :number, required: false,
+                description: 'Search radius in centimeters (returns circles completely within this radius)'
+
+      response(200, 'Circles retrieved successfully') do
+        schema type: :object,
+               properties: {
+                 circles: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     properties: {
+                       id: { type: :integer, example: 1 },
+                       x: { type: :string, example: '10.0' },
+                       y: { type: :string, example: '10.0' },
+                       diameter: { type: :string, example: '2.0' },
+                       radius: { type: :string, example: '1.0' },
+                       frame_id: { type: :integer, example: 1 }
+                     }
+                   }
+                 },
+                 total_count: { type: :integer, example: 3 }
+               },
+               required: [ 'circles', 'total_count' ]
+
+        context 'without filters' do
+          let(:frame1) { create(:frame, x: 10, y: 10, width: 10, height: 10) }
+          let(:frame2) { create(:frame, x: 25, y: 25, width: 10, height: 10) }
+
+          before do
+            create(:circle, frame: frame1, x: 8, y: 8, diameter: 2)
+            create(:circle, frame: frame1, x: 12, y: 12, diameter: 2)
+            create(:circle, frame: frame2, x: 25, y: 25, diameter: 3)
+          end
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+            expect(data).to include('circles', 'total_count')
+            expect(data['circles']).to be_an(Array)
+            expect(data['total_count']).to eq(3)
+          end
+        end
+
+        context 'with frame filter' do
+          let(:frame1) { create(:frame, x: 10, y: 10, width: 10, height: 10) }
+          let(:frame2) { create(:frame, x: 25, y: 25, width: 10, height: 10) }
+          let(:frame_id) { frame1.id }
+
+          before do
+            create(:circle, frame: frame1, x: 8, y: 8, diameter: 2)
+            create(:circle, frame: frame1, x: 12, y: 12, diameter: 2)
+            create(:circle, frame: frame2, x: 25, y: 25, diameter: 3)
+          end
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+            expect(data['total_count']).to eq(2)
+            expect(data['circles'].all? { |c| c['frame_id'] == frame1.id }).to be true
+          end
+        end
+
+        context 'with radius search' do
+          let(:frame) { create(:frame, x: 15, y: 15, width: 20, height: 20) }
+          let(:center_x) { 10 }
+          let(:center_y) { 10 }
+          let(:radius) { 5 }
+
+          before do
+            # Circle completely within radius (distance + radius = 3 + 1 = 4 < 5)
+            create(:circle, frame: frame, x: 8, y: 8, diameter: 2)
+            # Circle partially within radius (distance + radius = 4.24 + 1 = 5.24 > 5)
+            create(:circle, frame: frame, x: 13, y: 13, diameter: 2)
+            # Circle far outside radius
+            create(:circle, frame: frame, x: 20, y: 20, diameter: 2)
+          end
+
+          run_test! do |response|
+            data = JSON.parse(response.body)
+            expect(data['total_count']).to eq(1)
+          end
+        end
+      end
+    end
+  end
+
   path '/circles/{id}' do
     parameter name: 'id', in: :path, type: :integer, description: 'Circle ID'
 
