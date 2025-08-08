@@ -1,7 +1,8 @@
 class Frame < ApplicationRecord
   has_many :circles, dependent: :destroy
 
-  validates :x, :y, :width, :height, presence: true, numericality: true
+  validates :x, :y, presence: true, numericality: true
+  validates :width, :height, presence: true, numericality: { greater_than: 0 }
   validate :cannot_touch_or_overlap_other_frames
 
   def min_x = x - width / 2.0

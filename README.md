@@ -25,8 +25,9 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing f
 ## Endpoints
 
 POST /frames
-- [] Creates a new frame, receiving the position, height and width. Can also receive circles to be created together;
-- [] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
+- [X] Creates a new frame, receiving the position, height and width;
+- [] Can also receive circles to be created together;
+- [X] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 POST /frames/:frame/:id/circles
 - [] Adds a circle to the specified frame;
@@ -41,23 +42,23 @@ GET /circles?center_x=X&center_y=Y&radius=R&frame_id=ID
 - [] Returns 200 OK with the list of circles;
 
 GET /fames/:id
-- [] Returns details of a frame, including:
-  - [] x position
-  - [] y position
-  - [] total number of circles
-  - [] position of the circle that is in the highest position
-  - [] position of the circle that is in the lowest position
-  - [] position of the circle that is in the leftmost position
-  - [] position of the circle that is in the rightmost position
-- [] Returns 200 OK with the frame data and circle metrics;
+- [X] Returns details of a frame, including:
+  - [X] x position
+  - [X] y position
+  - [X] total number of circles
+  - [X] position of the circle that is in the highest position
+  - [X] position of the circle that is in the lowest position
+  - [X] position of the circle that is in the leftmost position
+  - [X] position of the circle that is in the rightmost position
+- [X] Returns 200 OK with the frame data and circle metrics;
 
 DELETE /circles/:id
 - [] Removes a circle;
 - [] Returns 204 No Content on success or 404 Not Found on error;
 
 DELETE /frames/:id
-- [] Removes a frame only if there are no associated circles;
-- [] Returns 204 No Content on success or 422 Unprocessable Entity on error;
+- [X] Removes a frame only if there are no associated circles;
+- [X] Returns 204 No Content on success or 422 Unprocessable Entity on error;
 
 ## Setup Ruby (only if you have not installed)
 
@@ -95,6 +96,9 @@ $ bin/rspec
 
 # run linter (backend)
 $ bin/rubocop
+
+# generate Swagger documentation
+$ bundle exec rails rswag:specs:swaggerize
 ```
 
 ## Setup Project (with docker)
@@ -108,4 +112,70 @@ docker compose run web rails db:create db:setup
 
 # run the web container to initialize database
 docker compose up
+```
+
+## API Documentation
+
+The API documentation is available at `/api-docs` when the server is running.
+
+### Frames API
+
+The following endpoints are available for managing frames:
+
+#### POST /frames
+Creates a new frame.
+
+**Request Body:**
+```json
+{
+  "frame": {
+    "x": 10.0,
+    "y": 10.0,
+    "width": 5.0,
+    "height": 5.0
+  }
+}
+```
+
+**Response (201 Created):**
+```json
+{
+  "id": 1,
+  "x": "10.0",
+  "y": "10.0",
+  "width": "5.0",
+  "height": "5.0",
+  "circles_count": 0
+}
+```
+
+#### GET /frames/:id
+Retrieves frame details including circle position metrics.
+
+**Response (200 OK):**
+```json
+{
+  "id": 1,
+  "x": "10.0",
+  "y": "10.0",
+  "width": "5.0",
+  "height": "5.0",
+  "circles_count": 2,
+  "highest_circle": {"x": "11.5", "y": "11.5"},
+  "lowest_circle": {"x": "10.0", "y": "10.0"},
+  "leftmost_circle": {"x": "10.0", "y": "10.0"},
+  "rightmost_circle": {"x": "11.5", "y": "11.5"}
+}
+```
+
+#### DELETE /frames/:id
+Deletes a frame. Only works if the frame has no associated circles.
+
+**Response (204 No Content):** Frame deleted successfully
+
+**Response (422 Unprocessable Entity):**
+```json
+{
+  "error": "Cannot delete frame with associated circles"
+}
 ```

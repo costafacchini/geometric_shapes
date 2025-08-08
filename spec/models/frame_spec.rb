@@ -19,12 +19,12 @@ RSpec.describe Frame, type: :model do
 
   describe 'width' do
     it { should validate_presence_of(:width) }
-    it { should validate_numericality_of(:width) }
+    it { should validate_numericality_of(:width).is_greater_than(0) }
   end
 
   describe 'height' do
     it { should validate_presence_of(:height) }
-    it { should validate_numericality_of(:height) }
+    it { should validate_numericality_of(:height).is_greater_than(0) }
   end
 
   describe 'coordinate calculation methods' do
@@ -159,13 +159,7 @@ RSpec.describe Frame, type: :model do
       expect(frame.max_y).to eq(22.4)
     end
 
-    it 'handles frames with zero dimensions' do
-      frame = build(:frame, x: 10, y: 10, width: 0, height: 0)
-      expect(frame.min_x).to eq(10.0)
-      expect(frame.max_x).to eq(10.0)
-      expect(frame.min_y).to eq(10.0)
-      expect(frame.max_y).to eq(10.0)
-    end
+
 
     it 'handles negative coordinates' do
       frame = build(:frame, x: -5, y: -10, width: 4, height: 6)

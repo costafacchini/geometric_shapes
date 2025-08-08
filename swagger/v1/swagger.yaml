@@ -1,0 +1,224 @@
+---
+openapi: 3.0.1
+info:
+  title: Geometric Shapes API
+  version: v1
+  description: API for managing geometric frames and circles with validation rules
+paths:
+  "/frames":
+    post:
+      summary: Create a frame
+      tags:
+      - Frames
+      description: Creates a new frame with specified dimensions and position
+      parameters: []
+      responses:
+        '201':
+          description: Frame created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  x:
+                    type: string
+                    example: '10.0'
+                  "y":
+                    type: string
+                    example: '10.0'
+                  width:
+                    type: string
+                    example: '5.0'
+                  height:
+                    type: string
+                    example: '5.0'
+                  circles_count:
+                    type: integer
+                    example: 0
+                required:
+                - id
+                - x
+                - "y"
+                - width
+                - height
+                - circles_count
+        '422':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - X can't be blank
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                frame:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      description: X coordinate of frame center in centimeters
+                      example: 10.0
+                    "y":
+                      type: number
+                      description: Y coordinate of frame center in centimeters
+                      example: 10.0
+                    width:
+                      type: number
+                      description: Width of frame in centimeters
+                      example: 5.0
+                    height:
+                      type: number
+                      description: Height of frame in centimeters
+                      example: 5.0
+                  required:
+                  - x
+                  - "y"
+                  - width
+                  - height
+              required:
+              - frame
+  "/frames/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Frame ID
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Get frame details
+      tags:
+      - Frames
+      description: Retrieves frame details including circle position metrics
+      responses:
+        '200':
+          description: Frame found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  x:
+                    type: string
+                    example: '10.0'
+                  "y":
+                    type: string
+                    example: '10.0'
+                  width:
+                    type: string
+                    example: '5.0'
+                  height:
+                    type: string
+                    example: '5.0'
+                  circles_count:
+                    type: integer
+                    example: 2
+                  highest_circle:
+                    type: object
+                    properties:
+                      x:
+                        type: string
+                        example: '11.5'
+                      "y":
+                        type: string
+                        example: '11.5'
+                    nullable: true
+                  lowest_circle:
+                    type: object
+                    properties:
+                      x:
+                        type: string
+                        example: '10.0'
+                      "y":
+                        type: string
+                        example: '10.0'
+                    nullable: true
+                  leftmost_circle:
+                    type: object
+                    properties:
+                      x:
+                        type: string
+                        example: '10.0'
+                      "y":
+                        type: string
+                        example: '10.0'
+                    nullable: true
+                  rightmost_circle:
+                    type: object
+                    properties:
+                      x:
+                        type: string
+                        example: '11.5'
+                      "y":
+                        type: string
+                        example: '11.5'
+                    nullable: true
+        '404':
+          description: Frame not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Frame not found
+    delete:
+      summary: Delete a frame
+      tags:
+      - Frames
+      description: Deletes a frame if it has no associated circles
+      responses:
+        '204':
+          description: Frame deleted successfully
+        '422':
+          description: Frame has associated circles
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Cannot delete frame with associated circles
+        '404':
+          description: Frame not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Frame not found
+servers:
+- url: http://localhost:3000
+  description: Development server
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com
+  description: Production server
+components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
