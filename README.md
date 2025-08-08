@@ -12,8 +12,8 @@ Develop a RESTful API in Ruby on Rails (API-only) for registering and managing f
 - [X] Ruby on Rails (API-only);
 - [X] Docker Compose for container orchestration;
 - [X] PostgreSQL (or MySQL) as database;
-- [] RSpec for automated tests covering all success and error scenarios for each endpoint;
-- [] Swagger/OpenAPI for endpoint documentation with request and response examples, models and status codes;
+- [X] RSpec for automated tests covering all success and error scenarios for each endpoint;
+- [X] Swagger/OpenAPI for endpoint documentation with request and response examples, models and status codes;
 - [X] README with setup and execution instructions
 
 ## Business rules
@@ -58,8 +58,8 @@ GET /fames/:id
 - [X] Returns 200 OK with the frame data and circle metrics;
 
 DELETE /circles/:id
-- [] Removes a circle;
-- [] Returns 204 No Content on success or 404 Not Found on error;
+- [X] Removes a circle;
+- [X] Returns 204 No Content on success or 404 Not Found on error;
 
 DELETE /frames/:id
 - [X] Removes a frame only if there are no associated circles;
