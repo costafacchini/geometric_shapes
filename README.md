@@ -1,7 +1,7 @@
 # Geometric Shapes API
 
-![CI](https://github.com/your-username/geometric_shapes/workflows/CI/badge.svg)
-![Coverage](https://codecov.io/gh/your-username/geometric_shapes/branch/main/graph/badge.svg)
+![CI](https://github.com/costafacchini/geometric_shapes/workflows/CI/badge.svg)
+![Coverage](https://codecov.io/gh/costafacchini/geometric_shapes/branch/main/graph/badge.svg)
 ![Ruby Version](https://img.shields.io/badge/ruby-3.3.1-red.svg)
 ![Rails Version](https://img.shields.io/badge/rails-8.0.2-red.svg)
 
