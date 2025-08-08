@@ -1,7 +1,7 @@
 json.partial! "frame", frame: @frame
 
-if @circle.present?
+if @frame.circles.any?
   json.circle do
-    json.partial! "frames/circles/circle", circle: @circle
+    json.partial! "frames/circles/circle", circle: @frame.circles.first
   end
 end

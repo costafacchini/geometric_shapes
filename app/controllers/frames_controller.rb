@@ -4,23 +4,12 @@ class FramesController < ApplicationController
   # POST /frames
   def create
     @frame = Frame.new(frame_params.except(:circle))
-    @circle = nil
 
-    Frame.transaction do
-      if @frame.save
-        if circle_params.present?
-          @circle = @frame.circles.build(circle_params)
-          unless @circle.save
-            raise ActiveRecord::Rollback
-          end
-        end
-        render :create, status: :created
-      else
-        render json: { errors: @frame.errors.full_messages }, status: :unprocessable_content
-      end
-    rescue ActiveRecord::Rollback
-      errors = @frame.errors.full_messages + (@circle&.errors&.full_messages || [])
-      render json: { errors: errors }, status: :unprocessable_content
+    @frame.circles.build(circle_params) if circle_params.present?
+    if @frame.save
+      render :create, status: :created
+    else
+      render json: { errors: @frame.errors.full_messages }, status: :unprocessable_content
     end
   end
 
