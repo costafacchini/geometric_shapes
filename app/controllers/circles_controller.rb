@@ -1,5 +1,5 @@
 class CirclesController < ApplicationController
-  before_action :set_circle, only: [ :update ]
+  before_action :set_circle, only: [ :update, :destroy ]
 
   # GET /circles
   def index
@@ -28,6 +28,12 @@ class CirclesController < ApplicationController
     else
       render json: { errors: @circle.errors.full_messages }, status: :unprocessable_content
     end
+  end
+
+  # DELETE /circles/:id
+  def destroy
+    @circle.destroy
+    head :no_content
   end
 
   private

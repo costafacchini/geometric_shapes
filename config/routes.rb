@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     resources :circles, only: [ :create ], controller: "frames/circles"
   end
 
-  resources :circles, only: [ :index, :update ]
+  resources :circles, only: [ :index, :update, :destroy ]
 
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"

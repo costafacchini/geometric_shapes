@@ -172,6 +172,24 @@ paths:
                   - diameter
               required:
               - circle
+    delete:
+      summary: Delete a circle
+      tags:
+      - Circles
+      description: Removes a circle from the system
+      responses:
+        '204':
+          description: Circle deleted successfully
+        '404':
+          description: Circle not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Circle not found
   "/frames":
     post:
       summary: Create a frame

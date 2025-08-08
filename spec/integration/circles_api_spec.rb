@@ -198,4 +198,35 @@ RSpec.describe 'Circles API', type: :request do
       end
     end
   end
+
+  path '/circles/{id}' do
+    parameter name: 'id', in: :path, type: :integer, description: 'Circle ID'
+
+    delete('Delete a circle') do
+      tags 'Circles'
+      description 'Removes a circle from the system'
+      produces 'application/json'
+
+      response(204, 'Circle deleted successfully') do
+        let(:frame) { create(:frame, x: 10, y: 10, width: 5, height: 5) }
+        let(:circle) { create(:circle, frame: frame, x: 10, y: 10, diameter: 2) }
+        let(:id) { circle.id }
+
+        run_test! do |response|
+          expect(response.body).to be_empty
+          expect(Circle.exists?(circle.id)).to be false
+        end
+      end
+
+      response(404, 'Circle not found') do
+        schema type: :object,
+               properties: {
+                 error: { type: :string, example: 'Circle not found' }
+               }
+
+        let(:id) { 999 }
+        run_test!
+      end
+    end
+  end
 end
