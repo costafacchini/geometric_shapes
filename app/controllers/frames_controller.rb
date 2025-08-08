@@ -43,8 +43,6 @@ class FramesController < ApplicationController
 
   def set_frame
     @frame = Frame.find(params[:id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Frame not found" }, status: :not_found
   end
 
   def frame_params

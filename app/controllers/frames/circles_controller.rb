@@ -16,8 +16,6 @@ class Frames::CirclesController < ApplicationController
 
   def set_frame
     @frame = Frame.find(params[:frame_id])
-  rescue ActiveRecord::RecordNotFound
-    render json: { error: "Frame not found" }, status: :not_found
   end
 
   def circle_params

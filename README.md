@@ -34,8 +34,8 @@ POST /frames/:frame/:id/circles
 - [X] Returns 201 Created on success or 422 Unprocessable Entity on validation errors;
 
 PUT /circles/:id
-- [] Updates the position of an existing circle;
-- [] Returns 200 OK on success or 422 Unprocessable Entity on validation errors;
+- [X] Updates the position of an existing circle;
+- [X] Returns 200 OK on success or 422 Unprocessable Entity on validation errors;
 
 GET /circles?center_x=X&center_y=Y&radius=R&frame_id=ID
 - [] Lists all circles completely within the specified radius (in centimeters) from a central point, optionally filtered by frame;

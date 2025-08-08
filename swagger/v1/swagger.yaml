@@ -5,6 +5,103 @@ info:
   version: v1
   description: API for managing geometric frames and circles with validation rules
 paths:
+  "/circles/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: Circle ID
+      required: true
+      schema:
+        type: integer
+    put:
+      summary: Update a circle
+      tags:
+      - Circles
+      description: Updates the position or size of an existing circle
+      parameters: []
+      responses:
+        '200':
+          description: Circle updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: integer
+                    example: 1
+                  x:
+                    type: string
+                    example: '11.0'
+                  "y":
+                    type: string
+                    example: '11.0'
+                  diameter:
+                    type: string
+                    example: '2.5'
+                  radius:
+                    type: string
+                    example: '1.25'
+                  frame_id:
+                    type: integer
+                    example: 1
+                required:
+                - id
+                - x
+                - "y"
+                - diameter
+                - radius
+                - frame_id
+        '422':
+          description: Invalid circle parameters
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+                    example:
+                    - Circle must be completely inside the frame
+        '404':
+          description: Circle not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: Circle not found
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                circle:
+                  type: object
+                  properties:
+                    x:
+                      type: number
+                      description: X coordinate of circle center in centimeters
+                      example: 11.0
+                    "y":
+                      type: number
+                      description: Y coordinate of circle center in centimeters
+                      example: 11.0
+                    diameter:
+                      type: number
+                      description: Diameter of circle in centimeters
+                      example: 2.5
+                  required:
+                  - x
+                  - "y"
+                  - diameter
+              required:
+              - circle
   "/frames":
     post:
       summary: Create a frame
