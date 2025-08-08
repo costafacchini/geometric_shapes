@@ -1,4 +1,9 @@
-# Coding Challenge
+# Geometric Shapes API
+
+![CI](https://github.com/your-username/geometric_shapes/workflows/CI/badge.svg)
+![Coverage](https://codecov.io/gh/your-username/geometric_shapes/branch/main/graph/badge.svg)
+![Ruby Version](https://img.shields.io/badge/ruby-3.3.1-red.svg)
+![Rails Version](https://img.shields.io/badge/rails-8.0.2-red.svg)
 
 Develop a RESTful API in Ruby on Rails (API-only) for registering and managing frames and circles, following geometric positioning and spatial limitation rules. All distances and dimensions must be expressed in centimeters, allowing decimal values.
 
